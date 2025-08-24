@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety Content Creator - Generator Treści Instagram</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header animate__animated animate__fadeInDown">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>Content Creator dla Inżynierii Bezpieczeństwa</h1>
+                <span class="version-badge">PRO v5.0</span>
+            </div>
+            <p class="subtitle">🛡️ Profesjonalne treści dla firmowego Instagrama</p>
+            <p class="creator-credit">by Dominika Kicia</p>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <span class="stat-number">1000+</span>
+                    <span class="stat-label">Postów wygenerowanych</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">95%</span>
+                    <span class="stat-label">Engagement rate</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">Specjalizacje eksperckie</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="posts">
+                <i class="fas fa-image"></i>
+                Posty Instagram
+            </button>
+            <button class="tab-btn" data-tab="enhanced">
+                <i class="fas fa-rocket"></i>
+                Enhanced Content
+            </button>
+            <button class="tab-btn" data-tab="calendar">
+                <i class="fas fa-calendar"></i>
+                Kalendarz
+            </button>
+            <button class="tab-btn" data-tab="analytics">
+                <i class="fas fa-chart-line"></i>
+                Analityka
+            </button>
+        </nav>
+
+        <!-- Posts Section -->
+        <section id="posts" class="tab-content active">
+            <div class="form-section animate__animated animate__fadeInUp">
+                <h2><i class="fas fa-magic"></i> Generator Postów Instagram</h2>
+
+                <form id="postForm" class="content-form">
+                    <div class="form-group">
+                        <label for="specialization">
+                            <i class="fas fa-cogs"></i>
+                            Wybierz specjalizację:
+                        </label>
+                        <select id="specialization" name="specialization" required>
+                            <option value="">-- Wybierz specjalizację --</option>
+                            {% for key, spec in specializations.items() %}
+                            <option value="{{ key }}">{{ spec.name }} - {{ spec.description }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="template">
+                            <i class="fas fa-layer-group"></i>
+                            Typ posta:
+                        </label>
+                        <select id="template" name="template" required>
+                            <option value="">-- Wybierz typ posta --</option>
+                            {% for key, template in templates.items() %}
+                            <option value="{{ key }}">{{ template.title }} ({{ template.structure }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="topic">
+                            <i class="fas fa-lightbulb"></i>
+                            Własny temat (opcjonalnie):
+                        </label>
+                        <input type="text" id="topic" name="topic"
+                            placeholder="np. nowe przepisy BHP 2025, aktualizacja RODO, ISO 45001...">
+                    </div>
+
+                    <!-- Opcje zaawansowane usunięte - uproszczony formularz -->
+
+                    <button type="submit" class="btn-generate">
+                        <i class="fas fa-rocket"></i>
+                        Wygeneruj Post Premium
+                    </button>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div id="postResults" class="results-section" style="display: none;">
+                <div class="result-header">
+                    <h3><i class="fas fa-star"></i> Post Premium Wygenerowany</h3>
+                    <div class="quality-indicators">
+                        <span class="indicator" data-type="engagement">
+                            <i class="fas fa-heart"></i>
+                            <span class="indicator-label">Engagement Score</span>
+                            <span class="indicator-value" id="engagementScore">96%</span>
+                        </span>
+                        <span class="indicator" data-type="seo">
+                            <i class="fas fa-search"></i>
+                            <span class="indicator-label">SEO Score</span>
+                            <span class="indicator-value" id="seoScore">94%</span>
+                        </span>
+                        <span class="indicator" data-type="expertise">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span class="indicator-label">Expert Level</span>
+                            <span class="indicator-value" id="expertScore">Premium</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="result-container">
+                    <div class="post-preview">
+                        <!-- Sekcja obrazów usunięta - skupiamy się na treściach tekstowych -->
+                        <div class="post-content">
+                            <div class="content-tabs">
+                                <button class="content-tab active" data-content="text">📝 Treść</button>
+                                <button class="content-tab" data-content="analysis">📊 Analiza</button>
+                                <button class="content-tab" data-content="schedule">📅 Harmonogram</button>
+                            </div>
+
+                            <div class="content-panel active" id="textContent">
+                                <div class="post-text">
+                                    <pre id="postText"></pre>
+                                </div>
+                                <div class="post-hashtags">
+                                    <span id="postHashtags"></span>
+                                </div>
+                            </div>
+
+                            <div class="content-panel" id="analysisContent">
+                                <div class="analysis-metrics">
+                                    <div class="metric">
+                                        <span class="metric-label">Szacowany zasięg:</span>
+                                        <span class="metric-value">12,500 - 18,200 osób</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="metric-label">Prawdopodobne interakcje:</span>
+                                        <span class="metric-value">850 - 1,240 reakcji</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="metric-label">Poziom ekspertyz:</span>
+                                        <span class="metric-value">Zaawansowany</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span class="metric-label">Docelowa audience:</span>
+                                        <span class="metric-value" id="targetAudience">Kierownictwo</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="content-panel" id="scheduleContent">
+                                <div class="schedule-suggestions">
+                                    <h5>🕒 Najlepsze godziny publikacji:</h5>
+                                    <ul>
+                                        <li><strong>Wtorek-Czwartek:</strong> 8:00-9:00, 12:00-13:00, 17:00-18:00</li>
+                                        <li><strong>LinkedIn sync:</strong> Wtorek 8:30</li>
+                                        <li><strong>Facebook cross-post:</strong> Środa 12:30</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-copy" onclick="copyToClipboard('postText')">
+                            <i class="fas fa-copy"></i>
+                            Kopiuj Tekst
+                        </button>
+                        <!-- Przycisk pobierania obrazów usunięty -->
+                        <button class="btn-new" onclick="generateNew()">
+                            <i class="fas fa-refresh"></i>
+                            Nowy Post
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced Content Section -->
+        <section id="enhanced" class="tab-content">
+            <div class="form-section animate__animated animate__fadeInUp">
+                <h2><i class="fas fa-rocket"></i> Enhanced Content - Professional Grade</h2>
+
+                <div class="enhanced-categories">
+                    <div class="category-grid">
+                        <div class="category-card" onclick="generateEnhancedContent('case_studies', 'manufacturing')">
+                            <i class="fas fa-industry"></i>
+                            <h3>Case Studies</h3>
+                            <p>Prawdziwe historie sukcesu klientów</p>
+                        </div>
+
+                        <div class="category-card" onclick="generateEnhancedContent('education', 'legal_updates')">
+                            <i class="fas fa-gavel"></i>
+                            <h3>Legal Updates</h3>
+                            <p>Najnowsze przepisy BHP i RODO</p>
+                        </div>
+
+                        <div class="category-card"
+                            onclick="generateEnhancedContent('sales_content', 'objection_handlers')">
+                            <i class="fas fa-handshake"></i>
+                            <h3>Sales Content</h3>
+                            <p>Treści sprzedażowe wysokiej konwersji</p>
+                        </div>
+
+                        <div class="category-card" onclick="generateEnhancedContent('engagement', 'polls_questions')">
+                            <i class="fas fa-users"></i>
+                            <h3>Engagement</h3>
+                            <p>Quizy, ankiety, interakcje</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="enhancedResult" class="result-section" style="display: none;">
+                    <div class="enhanced-content-display">
+                        <div class="content-preview">
+                            <h3>Generated Content</h3>
+                            <div id="enhancedContentText" class="content-text"></div>
+                        </div>
+
+                        <div class="canva-export">
+                            <h3>Canva Export Ready</h3>
+                            <div id="canvaData" class="canva-info">
+                                <p><strong>Format:</strong> <span id="canvaFormat"></span></p>
+                                <p><strong>Dimensions:</strong> <span id="canvaDimensions"></span></p>
+                                <p><strong>Title:</strong> <span id="canvaTitle"></span></p>
+                            </div>
+                            <button class="btn-export" onclick="exportToCanva()">
+                                <i class="fas fa-download"></i>
+                                Export do Canva
+                            </button>
+                        </div>
+
+                        <div class="engagement-prediction">
+                            <h3>Prognoza Engagement</h3>
+                            <div id="engagementScore" class="score-display">85%</div>
+                            <p>Przewidywany poziom zaangażowania</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calendar Section -->
+        <section id="calendar" class="tab-content">
+            <div class="form-section animate__animated animate__fadeInUp">
+                <h2><i class="fas fa-calendar"></i> Kalendarz Publikacji</h2>
+
+                <div class="calendar-controls">
+                    <button class="btn-calendar" onclick="loadCalendar()">
+                        <i class="fas fa-refresh"></i>
+                        Odśwież Kalendarz
+                    </button>
+
+                    <div class="month-navigation">
+                        <button onclick="changeMonth(-1)">←</button>
+                        <span id="currentMonth">Listopad 2024</span>
+                        <button onclick="changeMonth(1)">→</button>
+                    </div>
+                </div>
+
+                <div id="calendarView" class="calendar-display">
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Calendar will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="optimal-times">
+                    <h3>Optymalne Godziny Publikacji</h3>
+                    <div id="optimalTimes" class="time-slots">
+                        <span class="time-slot">11:00</span>
+                        <span class="time-slot">17:00</span>
+                        <span class="time-slot">19:00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics" class="tab-content">
+            <div class="form-section animate__animated animate__fadeInUp">
+                <h2><i class="fas fa-chart-line"></i> Analityka Treści</h2>
+
+                <div class="analytics-dashboard">
+                    <div class="metric-cards">
+                        <div class="metric-card">
+                            <h3>Total Posts</h3>
+                            <div class="metric-value" id="totalPosts">28</div>
+                            <div class="metric-change">+12% vs last month</div>
+                        </div>
+
+                        <div class="metric-card">
+                            <h3>Avg Engagement</h3>
+                            <div class="metric-value" id="avgEngagement">4.2%</div>
+                            <div class="metric-change">+0.8% vs last month</div>
+                        </div>
+
+                        <div class="metric-card">
+                            <h3>Follower Growth</h3>
+                            <div class="metric-value" id="followerGrowth">+89</div>
+                            <div class="metric-change">+15% vs last month</div>
+                        </div>
+
+                        <div class="metric-card">
+                            <h3>Leads Generated</h3>
+                            <div class="metric-value" id="leadsGenerated">12</div>
+                            <div class="metric-change">+25% vs last month</div>
+                        </div>
+                    </div>
+
+                    <div class="analytics-charts">
+                        <div class="chart-section">
+                            <h3>Top Performing Posts</h3>
+                            <div id="topPosts" class="top-posts-list">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <div class="chart-section">
+                            <h3>Best Hashtags</h3>
+                            <div id="bestHashtags" class="hashtag-performance">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-refresh" onclick="loadAnalytics()">
+                        <i class="fas fa-sync"></i>
+                        Odśwież Dane
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+            <div class="spinner"></div>
+            <p>Generuję kreatywną treść...</p>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toast" class="toast"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/export.js') }}"></script>
+</body>
+
+</html>
